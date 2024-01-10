@@ -33,7 +33,7 @@ function menorCusto(
   // esse vetor e apenas para ter a mesma base visual para a analise do comportamento do algoritmo
   // a cada iteracao
   // ele e preenchido totalmente com 0 para acompanhar as modificacoes
-  let vetorModificado: Array<Array<number>> = [...matrizCustoTransporte].map(
+  let matrizResultado: Array<Array<number>> = [...matrizCustoTransporte].map(
     (rows) => {
       let n = rows.map((val) => 0);
 
@@ -73,32 +73,38 @@ function menorCusto(
       maxRetirada = oferta;
     }
     //
-    vetorModificado[posicaoMenorValor[0]][posicaoMenorValor[1]] = maxRetirada;
+    matrizResultado[posicaoMenorValor[0]][posicaoMenorValor[1]] = maxRetirada;
     // caso a retirada zere a oferta e nescessario zerar todos os custos dos outros pontos
     // da linha de oferta
     if (oferta - maxRetirada === 0) {
       // atribui zero para toda a linha menos a de valor
-      vetorModificado[posicaoMenorValor[0]] = vetorModificado[
+      matrizResultado[posicaoMenorValor[0]] = matrizResultado[
         posicaoMenorValor[0]
-      ].map((val) => (val == undefined ? 0 : val));
+      ].map((val) => (val == 0 ? 0 : val));
 
       // marca as casas como percorridas
-      casasPercorridas[posicaoMenorValor[0]] = vetorModificado[
+      casasPercorridas[posicaoMenorValor[0]] = matrizResultado[
         posicaoMenorValor[0]
       ].map((val) => true);
     }
-  
+
     //Bom agora e so fazer as retiradas tanto da oferta quanto da demanda
     capacidadesM[posicaoMenorValor[0]] = oferta - maxRetirada;
     demandasN[posicaoMenorValor[1]] = demanda - maxRetirada;
     // printa o passo a passo
-    console.table(vetorModificado);
+    console.log("-----------------------------");
+    console.table(matrizResultado);
+    console.log("oferta: ");
+    console.log(capacidadesM);
+    console.log("demanda: ");
+    console.log(demandasN);
+    console.log("------------------------------");
 
     // verifica se todas as casas ja foram percorridas
     todasAsCasasForamPercorridas = verificarMatriz(casasPercorridas);
   }
 
-  const custoTotal = somarMatriz(vetorModificado, matrizCustoTransporte);
+  const custoTotal = somarMatriz(matrizResultado, matrizCustoTransporte);
 
   console.log("Custo Total: " + custoTotal);
 }
